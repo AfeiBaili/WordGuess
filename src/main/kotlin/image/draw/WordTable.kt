@@ -7,7 +7,7 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.image.BufferedImage
 
-class Word(
+class WordTable(
     val level: Int,
     val word: String,
     width: Int,
@@ -33,7 +33,7 @@ class Word(
     }
 
     fun drawWord(word1: String) {
-        val wrapSize = width - this@Word.margin * 2
+        val wrapSize = width - this@WordTable.margin * 2
         var blockSize: Int = wrapSize / level
         val margin = (blockSize * 0.1).toInt()
         var correctCount = 0
@@ -45,8 +45,8 @@ class Word(
 
             var block = Block(char, blockSize, blockSize, margin, themeColor1)
 
-            val xOffset: Int = i * blockSize + this@Word.margin
-            val yOffset: Int = count * blockSize + this@Word.margin
+            val xOffset: Int = i * blockSize + this@WordTable.margin
+            val yOffset: Int = count * blockSize + this@WordTable.margin
 
             image.createGraphics().drawImage(block.image, xOffset, yOffset, null)
         }
@@ -64,7 +64,7 @@ class Word(
             val themeColor1 =
                 ThemeColor(Color(0, 0, 0, 0), backgroundColor, Color(0, 0, 0, 0), Color(0, 0, 0, 0))
             createGraphics().apply {
-                drawImageBackground(themeColor1, width, height, this@Word.margin, round)
+                drawImageBackground(themeColor1, width, height, this@WordTable.margin, round)
                 drawCenterString(message, Color(0, 0, 0), FontFile.FONT.deriveFont(120f), width, height)
             }
         }

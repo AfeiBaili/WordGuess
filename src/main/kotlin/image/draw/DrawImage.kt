@@ -1,4 +1,3 @@
 package online.afeibaili.image.draw
 
-interface DrawImage {
-}
+abstract class DrawImage(val width: Int,val height: Int,val themeColor: ThemeColor)

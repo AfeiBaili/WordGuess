@@ -1,4 +1,6 @@
-package online.afeibaili
+package online.afeibaili.util
+
+import kotlin.text.iterator
 
 fun Int.toChinese(): String {
     val stringBuilder: StringBuilder = StringBuilder()

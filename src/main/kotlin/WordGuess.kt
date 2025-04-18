@@ -3,6 +3,7 @@ package online.afeibaili
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.utils.info
+import online.afeibaili.file.EnWordsFill
 
 object WordGuess : KotlinPlugin(
     JvmPluginDescription(
@@ -14,6 +15,8 @@ object WordGuess : KotlinPlugin(
     }
 ) {
     override fun onEnable() {
-        logger.info { "Plugin loaded" }
+        logger.info { "猜单词插件加载成功" }
+        EnWordsFill.loadWordArray()
+        Listener.load()
     }
 }
