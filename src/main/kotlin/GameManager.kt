@@ -6,10 +6,12 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import online.afeibaili.file.EnWordsFill
 import online.afeibaili.file.Word
 import online.afeibaili.image.GameImage
+import java.awt.Color
 import java.util.*
 
 object GameManager {
 
+    val themeColor = HashMap<String, Color>()
     val games: HashMap<Long, GameImage> = HashMap()
     val random = Random()
     suspend fun parse(message: String, event: GroupMessageEvent) {
@@ -26,11 +28,19 @@ object GameManager {
 
         when {
             message == "猜单词" -> {
-                wordGuess(random.nextInt(EnWordsFill.wordArray!!.size))
+                wordGuess(random.nextInt(1, EnWordsFill.wordArray!!.size))
             }
 
             message == "换词" -> {
                 games[groupId]?.let { wordGuess(games[groupId]!!.word.word.length) }
+            }
+
+            message == "我认输" -> {
+                games[groupId]?.let {
+                    games[groupId]!!.concedeWord(event)
+                    send.sendImage(games[groupId]!!.getImage())
+                    games.remove(groupId)
+                }
             }
 
             message.contains("阶猜单词") -> {
@@ -58,7 +68,7 @@ object GameManager {
         games[groupId]?.run {
             var regex: Regex = "[A-Za-z]{${word.word.length}}".toRegex()
             if (!regex.matches(message)) return
-            updateWord(message.uppercase())
+            updateWord(message.uppercase(), event)
 
             when (wordTable.state) {
                 1 -> {

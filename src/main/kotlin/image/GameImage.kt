@@ -1,5 +1,6 @@
 package online.afeibaili.image
 
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import online.afeibaili.file.Word
 import online.afeibaili.image.draw.ThemeColor
 import online.afeibaili.image.draw.Tip
@@ -22,7 +23,7 @@ class GameImage(val word: Word, margin: Int = 40, val width: Int = 1200, val hei
     val title = Title("${word.word.length.toChinese()}阶猜单词", width, 300, margin, 30, ThemeColor.DEFAULT)
 
     // 1200的内容
-    val wordTable = WordTable(level, word.word, width, 1200, margin, 30, ThemeColor.NO_WARPS_COLOR)
+    val wordTable = WordTable(level, word, width, 1200, margin, 30, ThemeColor.NO_WARPS_COLOR)
 
     // 300的词释义
     val tip = Tip(word.translation, width, 300, margin, 30, ThemeColor.DEFAULT)
@@ -51,8 +52,14 @@ class GameImage(val word: Word, margin: Int = 40, val width: Int = 1200, val hei
         )
     }
 
-    fun updateWord(newWord: String) {
-        wordTable.updateWord(newWord)
+    fun updateWord(newWord: String, event: GroupMessageEvent) {
+        wordTable.updateWord(newWord, event)
+        image.createGraphics()
+            .drawImage(wordTable.image, 0, title.height - wordTable.margin, wordTable.width, wordTable.height, null)
+    }
+
+    fun concedeWord(event: GroupMessageEvent) {
+        wordTable.drawEndUi("${event.senderName}已认输，答案为${word.word.lowercase()}", Color(70, 70, 70, 90))
         image.createGraphics()
             .drawImage(wordTable.image, 0, title.height - wordTable.margin, wordTable.width, wordTable.height, null)
     }

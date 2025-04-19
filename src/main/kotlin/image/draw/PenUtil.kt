@@ -22,4 +22,22 @@ object PenUtil {
         var stringHeight: Int = fontMetrics.height
         drawString(title, width / 2 - stringWidth / 2, height / 2 + stringHeight / 3)
     }
+
+    fun Graphics2D.drawCenterCoverString(title: String, color1: Color, deriveFont: Font, width: Int, height: Int) {
+        fun getCoverFont(stringWidth: Int): Int {
+            if (stringWidth + 100 > width) {
+                font = font.deriveFont(font.size - 1.toFloat())
+                getCoverFont(fontMetrics.stringWidth(title))
+            }
+            return fontMetrics.stringWidth(title)
+        }
+
+        color = color1
+        font = deriveFont
+        var stringWidth: Int = getCoverFont(fontMetrics.stringWidth(title))
+        var stringHeight: Int = fontMetrics.height
+
+        drawString(title, width / 2 - stringWidth / 2, height / 2 + stringHeight / 3)
+
+    }
 }

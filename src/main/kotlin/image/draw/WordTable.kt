@@ -1,7 +1,9 @@
 package online.afeibaili.image.draw
 
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import online.afeibaili.file.FontFile
-import online.afeibaili.image.draw.PenUtil.drawCenterString
+import online.afeibaili.file.Word
+import online.afeibaili.image.draw.PenUtil.drawCenterCoverString
 import online.afeibaili.image.draw.PenUtil.drawImageBackground
 import java.awt.Color
 import java.awt.Font
@@ -9,7 +11,7 @@ import java.awt.image.BufferedImage
 
 class WordTable(
     val level: Int,
-    val word: String,
+    val word: Word,
     width: Int,
     height: Int,
     val margin: Int,
@@ -17,7 +19,7 @@ class WordTable(
     themeColor: ThemeColor,
 ) : DrawImage(width, height, themeColor) {
     var count = 0
-    val wordCharArray: CharArray = word.toCharArray()
+    val wordCharArray: CharArray = word.word.toCharArray()
 
     /**
      * 0无状态、1胜利状态、2失败状态
@@ -28,11 +30,11 @@ class WordTable(
 
     }
 
-    fun updateWord(newWord: String) {
-        drawWord(newWord)
+    fun updateWord(newWord: String, event: GroupMessageEvent) {
+        drawWord(newWord, event)
     }
 
-    fun drawWord(word1: String) {
+    fun drawWord(word1: String, event: GroupMessageEvent) {
         val wrapSize = width - this@WordTable.margin * 2
         var blockSize: Int = wrapSize / level
         val margin = (blockSize * 0.1).toInt()
@@ -50,22 +52,22 @@ class WordTable(
 
             image.createGraphics().drawImage(block.image, xOffset, yOffset, null)
         }
-        if (++count >= word.length) {
-            state = 2
-            drawEndUi("次数已用尽！", Color(214, 141, 138, 90))
-        } else if (correctCount == word.length) {
+        if (correctCount == word.word.length) {
             state = 1
-            drawEndUi("猜对了，真厉害！", Color(167, 214, 139, 90))
+            drawEndUi("${event.senderName}猜对了加一分，真厉害！", Color(167, 214, 139, 90))
+        } else if (++count >= word.word.length) {
+            state = 2
+            drawEndUi("次数已用尽！正确答案为：${word.word.lowercase()}", Color(214, 141, 138, 90))
         }
     }
 
-    private fun drawEndUi(message: String, backgroundColor: Color) {
+    fun drawEndUi(message: String, backgroundColor: Color) {
         var bufferedImage: BufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB).apply {
             val themeColor1 =
                 ThemeColor(Color(0, 0, 0, 0), backgroundColor, Color(0, 0, 0, 0), Color(0, 0, 0, 0))
             createGraphics().apply {
                 drawImageBackground(themeColor1, width, height, this@WordTable.margin, round)
-                drawCenterString(message, Color(0, 0, 0), FontFile.FONT.deriveFont(120f), width, height)
+                drawCenterCoverString(message, Color(0, 0, 0, 200), FontFile.FONT.deriveFont(120f), width, height)
             }
         }
         image.createGraphics().drawImage(bufferedImage, 0, 0, width, height, null)
