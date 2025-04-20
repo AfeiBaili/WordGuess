@@ -108,19 +108,20 @@ object GameManager {
                     2 -> {
                         games.remove(groupId)
                     }
+
+                    else -> {
+                        if (games[groupId]!!.bigTitle.contains("猜单词")) {
+                            var regex: Regex = "[A-Za-z]{${word.word.length}}".toRegex()
+                            if (!regex.matches(message)) return
+                        } else if (games[groupId]!!.bigTitle.contains("猜MC")) {
+                            var regex: Regex = ".{${word.word.length}}".toRegex()
+                            if (!regex.matches(message)) return
+                        }
+
+                        updateWord(message.uppercase(), event)
+                        send.sendImage(getImage())
+                    }
                 }
-
-
-                if (games[groupId]!!.bigTitle.contains("猜单词")) {
-                    var regex: Regex = "[A-Za-z]{${word.word.length}}".toRegex()
-                    if (!regex.matches(message)) return
-                } else if (games[groupId]!!.bigTitle.contains("猜MC")) {
-                    var regex: Regex = ".{${word.word.length}}".toRegex()
-                    if (!regex.matches(message)) return
-                }
-
-                updateWord(message.uppercase(), event)
-                send.sendImage(getImage())
             }
         }
     }
