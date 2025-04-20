@@ -14,13 +14,19 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
-class GameImage(val word: Word, margin: Int = 40, val width: Int = 1200, val height: Int = 1800 - (margin * 2)) {
+class GameImage(
+    val word: Word,
+    val bigTitle: String,
+    margin: Int = 40,
+    val width: Int = 1200,
+    val height: Int = 1800 - (margin * 2),
+) {
     val level = word.word.length
     var image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
     val backgroundColor: Color = ThemeColor.DEFAULT.backgroundColor
 
     // 300的标题
-    val title = Title("${word.word.length.toChinese()}阶猜单词", width, 300, margin, 30, ThemeColor.DEFAULT)
+    val title = Title("${word.word.length.toChinese()}阶$bigTitle", width, 300, margin, 30, ThemeColor.DEFAULT)
 
     // 1200的内容
     val wordTable = WordTable(level, word, width, 1200, margin, 30, ThemeColor.NO_WARPS_COLOR)
