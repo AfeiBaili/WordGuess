@@ -19,7 +19,7 @@ class WordTable(
     themeColor: ThemeColor,
 ) : DrawImage(width, height, themeColor) {
     var count = 0
-    val wordCharArray: CharArray = word.word.toCharArray()
+    val wordCharArray: CharArray = word.word.uppercase().toCharArray()
 
     /**
      * 0无状态、1胜利状态、2失败状态

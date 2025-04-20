@@ -10,7 +10,7 @@ object WordGuess : KotlinPlugin(
     JvmPluginDescription(
         id = "online.afeibaili.wordguess",
         name = "WordGuess",
-        version = "1.2.0",
+        version = "1.2.1",
     ) {
         author("AfeiBaili")
     }
